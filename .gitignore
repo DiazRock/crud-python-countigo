@@ -283,3 +283,6 @@ vendors.js
 .env
 .envs/*
 !.envs/.local/
+
+# token for github
+.token
