@@ -41,7 +41,7 @@ class User(AbstractUser):
     )
 
     ci_regex = RegexValidator (
-        regex = r'^[0][1-9]\d{9}$|^[1-9]\d{9}$',
+        regex = r'\d{11}',
         message = "CI must be conformed by eleven digits from 1 to 9"
     )
     ci_field = CharField(
@@ -74,9 +74,9 @@ class Technology(Model):
         )
 
 class TechnologyExperience(Model):
-    user = ForeignKey(User, ondelete=CASCADE)
-    technology = ForeignKey(Technology, ondelete=CASCADE)
-    experience = IntegerField( 
+    user = ForeignKey(User, on_delete=CASCADE)
+    technology = ForeignKey(Technology, on_delete=CASCADE)
+    experience = PositiveBigIntegerField( 
         blank = False,
         null = False,
         default = 0)
