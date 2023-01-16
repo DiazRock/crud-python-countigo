@@ -109,6 +109,7 @@ class TechnologyExperienceViewSet(
             ]
         
         sortedList = sorted(unsorted, key = lambda k: k['experience'])
+        sortedList.reverse()
         return Response(
             sortedList
             )
