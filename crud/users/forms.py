@@ -22,7 +22,7 @@ class UserAdminCreationForm(admin_forms.UserCreationForm):
         model = User
 
         error_messages = {
-            "username": {"unique": _("This username has already been taken.")}
+            "ci_field": {"unique": _("This ci_field has already been taken.")}
         }
 
 
