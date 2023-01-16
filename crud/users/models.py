@@ -28,6 +28,7 @@ class User(AbstractUser):
                         null=False,
                         default='John')
 
+
     last_name = CharField(
                         help_text ="Last Name of User",
                         blank=False,
@@ -49,7 +50,8 @@ class User(AbstractUser):
         max_length = 11, 
         blank = False,
         null = False,
-        default='11111111111' )
+        default='11111111111',
+        unique = True )
 
     age = PositiveBigIntegerField (
         help_text = "Age of User",
@@ -65,12 +67,16 @@ class User(AbstractUser):
             str: URL for user detail.
 
         """
-        return reverse("users:detail", kwargs = {"username": self.username})
+        return reverse("users:detail", kwargs = {"name": self.first_name})
+
+
+
 
 class Technology(Model):
     name = CharField(
         max_length = 255,
-        help_text = "Name of the technology"
+        help_text = "Name of the technology",
+        unique = True
         )
 
 class TechnologyExperience(Model):
