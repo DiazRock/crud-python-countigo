@@ -21,6 +21,26 @@ class User(AbstractUser):
     """
 
     #: First and last name do not cover name patterns around the globe
+ 
+
+    def get_absolute_url(self):
+        """Get url for user's detail view.
+
+        Returns:
+            str: URL for user detail.
+
+        """
+        return reverse("users:detail", kwargs = {"name": self.username})
+
+
+class Applicant(Model):
+    """
+    Default custom user model for crud.
+    If adding fields that need to be filled at user signup,
+    check forms.SignupForm and forms.SocialSignupForms accordingly.
+    """
+
+    #: First and last name do not cover name patterns around the globe
     first_name = CharField(
                         help_text ="Name of User", 
                         blank=False, 
@@ -71,16 +91,15 @@ class User(AbstractUser):
 
 
 
-
 class Technology(Model):
-    name = CharField(
+    tech_name = CharField(
         max_length = 255,
         help_text = "Name of the technology",
         unique = True
         )
 
 class TechnologyExperience(Model):
-    user = ForeignKey(User, on_delete=CASCADE)
+    applicant = ForeignKey(Applicant, on_delete=CASCADE)
     technology = ForeignKey(Technology, on_delete=CASCADE)
     experience = PositiveBigIntegerField( 
         blank = False,

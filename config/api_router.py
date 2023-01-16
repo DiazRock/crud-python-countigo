@@ -1,7 +1,7 @@
 from django.conf import settings
 from rest_framework.routers import DefaultRouter, SimpleRouter
 
-from crud.users.api.views import UserViewSet, TechnologyViewSet, TechnologyExperienceViewSet
+from crud.users.api.views import UserViewSet, TechnologyViewSet, TechnologyExperienceViewSet, ApplicantViewSet
 
 if settings.DEBUG:
     router = DefaultRouter()
@@ -10,6 +10,7 @@ else:
 
 router.register("users", UserViewSet)
 router.register("technology", TechnologyViewSet)
+router.register("applicant", ApplicantViewSet)
 router.register("technology-experience", TechnologyExperienceViewSet)
 
 app_name = "api"

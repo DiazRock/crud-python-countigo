@@ -9,8 +9,8 @@ from rest_framework.mixins import (
     CreateModelMixin)
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
-from crud.users.models import Technology, TechnologyExperience
-from .serializers import UserSerializer, TechnologySerializer, TechnologyExperienceSerializer
+from crud.users.models import Technology, TechnologyExperience, Applicant
+from .serializers import UserSerializer, TechnologySerializer, TechnologyExperienceSerializer, ApplicantSerializer
 
 User = get_user_model()
 
@@ -37,7 +37,20 @@ class UserViewSet(
         return Response(status=status.HTTP_200_OK, data=serializer.data)
 
     
+class ApplicantViewSet(
+        RetrieveModelMixin,
+        ListModelMixin, 
+        UpdateModelMixin,
+        CreateModelMixin, 
+        GenericViewSet):
+    serializer_class = ApplicantSerializer
+    queryset = Applicant.objects.all()
+    lookup_field = "ci_field"
+    allowed_methods= ['POST', 'GET']
+
     
+
+
 
 class TechnologyViewSet(
     RetrieveModelMixin,
@@ -67,7 +80,7 @@ class TechnologyExperienceViewSet(
         import ipdb; ipdb.set_trace()
         technologies = TechnologyExperience.\
                     objects.\
-                    filter(user = int(request.query_params['user_id'])).\
+                    filter(applicant = int(request.query_params['applicant_id'])).\
                     values('technology', 'experience')
         
         
@@ -87,10 +100,10 @@ class TechnologyExperienceViewSet(
         users_and_exp = TechnologyExperience.\
                     objects.\
                     filter(technology = int(request.query_params['tech_id'])).\
-                    values('user', 'experience')
+                    values('applicant', 'experience')
         unsorted = [
                 {
-                "user_name": User.objects.get(pk=t['user']).name, 
+                "'applicant'_name": User.objects.get(pk=t['applicant']).name, 
                 "experience": t['experience'] 
                 } for t in users_and_exp
             ]
