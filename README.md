@@ -14,3 +14,8 @@ License: MIT
 `make buildAndRun` Build the system using docker-compose and docker
 
 `make run` Run the services 
+
+
+# Using the api
+
+Take a look at http://localhost:8000/api/. Your gonna see here the endpoints of the api
