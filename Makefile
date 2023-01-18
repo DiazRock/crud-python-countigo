@@ -10,8 +10,4 @@ buildAndRun:
 run:
 	./run_compose.sh up
 
-test:
-	./run_compose.sh up
-	./run_compose.sh run --rm django pytest
-
 	
