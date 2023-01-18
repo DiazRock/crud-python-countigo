@@ -48,9 +48,6 @@ class ApplicantViewSet(
     lookup_field = "ci_field"
     allowed_methods= ['POST', 'GET']
 
-    
-
-
 
 class TechnologyViewSet(
     RetrieveModelMixin,
@@ -71,13 +68,13 @@ class TechnologyExperienceViewSet(
     allowed_methods= ['POST', 'GET']
     serializer_class = TechnologyExperienceSerializer
     queryset = TechnologyExperience.objects.all()
+
     
 
     @action(methods = ['get'], detail = False,
-            url_path = 'get-techs-experience-by-user')
+            url_path = 'get-techs-experience-by-applicant')
     def get_techs_experience_by_user(self, request):
         """ Get the experience of the user in all techs"""
-        import ipdb; ipdb.set_trace()
         technologies = TechnologyExperience.\
                     objects.\
                     filter(applicant = int(request.query_params['applicant_id'])).\
@@ -87,14 +84,14 @@ class TechnologyExperienceViewSet(
         return Response(
             [
                 {
-                "tech_name": Technology.objects.get(pk=t['technology']).name, 
+                "tech_name": Technology.objects.get(pk=t['technology']).tech_name, 
                 "experience": t['experience'] 
                 } for t in technologies
             ]
             )
 
     @action(methods = ['get'], detail = False,
-            url_path = 'get-user-experience-by-tech')
+            url_path = 'get-applicant-experience-by-tech')
     def get_user_experience_by_tech(self, request, *args, **kwargs):
         """ Get the experience of the user in all techs"""
         users_and_exp = TechnologyExperience.\
@@ -103,7 +100,7 @@ class TechnologyExperienceViewSet(
                     values('applicant', 'experience')
         unsorted = [
                 {
-                "'applicant'_name": User.objects.get(pk=t['applicant']).name, 
+                "applicant_name": Applicant.objects.get(pk=t['applicant']).first_name + " " + Applicant.objects.get(pk=t['applicant']).last_name, 
                 "experience": t['experience'] 
                 } for t in users_and_exp
             ]
