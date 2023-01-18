@@ -27,55 +27,18 @@
       <!-- place project specific Javascript in this file -->
       <script defer src="{% static 'js/project.min.js' %}"></script>
 
+      <script defer src="{% static 'js/api_call_applicants.js' %}"></script>
+      <script defer  src="{% static 'js/jspdf.min.js' %}" ></script>
+
     {% endblock javascript %}
 
   </head>
-
-  <body>
-
-    <div class="mb-1">
-      <nav class="navbar navbar-expand-md navbar-light bg-light">
-        <div class="container-fluid">
-          <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <a class="navbar-brand" href="{% url 'home' %}">crud</a>
-
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-              <li class="nav-item active">
-                <a class="nav-link" href="{% url 'home' %}">Home <span class="visually-hidden">(current)</span></a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'about' %}">About</a>
-              </li>
-              {% if request.user.is_authenticated %}
-                <li class="nav-item">
-                  {# URL provided by django-allauth/account/urls.py #}
-                  <a class="nav-link" href="{% url 'users:detail' request.user.username  %}">{% translate "My Profile" %}</a>
-                </li>
-                <li class="nav-item">
-                  {# URL provided by django-allauth/account/urls.py #}
-                  <a class="nav-link" href="{% url 'account_logout' %}">{% translate "Sign Out" %}</a>
-                </li>
-              {% else %}
-                {% if ACCOUNT_ALLOW_REGISTRATION %}
-              <li class="nav-item">
-                {# URL provided by django-allauth/account/urls.py #}
-                <a id="sign-up-link" class="nav-link" href="{% url 'account_signup' %}">{% translate "Sign Up" %}</a>
-              </li>
-              {% endif %}
-                <li class="nav-item">
-                  {# URL provided by django-allauth/account/urls.py #}
-                  <a id="log-in-link" class="nav-link" href="{% url 'account_login' %}">{% translate "Sign In" %}</a>
-                </li>
-              {% endif %}
-            </ul>
-          </div>
-        </div>
-      </nav>
-
-    </div>
+  <style>
+    th{ 
+        color:#fff;
+            }
+  </style>
+  <body onload="initPage('list', 'form')">
 
     <div class="container">
 
@@ -87,13 +50,47 @@
           </div>
         {% endfor %}
       {% endif %}
-
       {% block content %}
-        <p>Use this document as a way to quick start any new project.</p>
+      <button 
+        id="btnAdd"
+        onclick="getExperienceByTechAndBuildTable('list')"
+      > 
+        Experience by tech
+      </button>
+      <button 
+          type="button" 
+          data-bs-dismiss="alert" 
+          aria-label="Close"
+          onclick="getApplicantsAndBuildTable()">
+            Show Applicants table
+        </button>
+      <button 
+          type="button" 
+          data-bs-dismiss="alert" 
+          aria-label="Close"
+          onclick="getApplicantsWithTechExperienceAndBuildTable()">
+            Applicants and Techs
+      </button>
+
+      <form id="form">
+      
+
+        <label for="list">Technology List:</label>
+        <select id="list" name="list">
+        </select>
+      </form>
+
+      <div id = "scope_table">
+        
+      </div>
+      <button id="btnAdd"
+              onclick="pdfExport('scope_table')"
+              > Export Table
+      </button>
       {% endblock content %}
-
+      
     </div> <!-- /container -->
-
+    
     {% block modal %}{% endblock modal %}
 
     {% block inline_javascript %}
@@ -101,7 +98,9 @@
     Script tags with only code, no src (defer by default). To run
     with a "defer" so that you run inline code:
     <script>
-      window.addEventListener('DOMContentLoaded', () => {/* Run whatever you want */});
+      window.addEventListener('DOMContentLoaded', () => {
+        
+      });
     </script>
     {% endcomment %}
     {% endblock inline_javascript %}
